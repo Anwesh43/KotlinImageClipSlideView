@@ -131,7 +131,8 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
     companion object {
         fun create(activity:Activity,bitmap:Bitmap):ImageClipSideView {
             val view = ImageClipSideView(activity,bitmap)
-            activity.addContentView(view,ViewGroup.LayoutParams(1080,1080))
+            val size = DimensionUtil.getSize(activity)
+            activity.addContentView(view,ViewGroup.LayoutParams(size.x,size.x))
             return view
         }
     }
