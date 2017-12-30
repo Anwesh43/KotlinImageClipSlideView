@@ -56,6 +56,22 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             })
         }
     }
+    data class ImageClipSideRenderer(var view:ImageClipSideView,var time:Int = 0) {
+        var container:ImageClipSideContainer?=null
+        fun render(canvas:Canvas,paint:Paint) {
+            if(time == 0) {
+                val w = canvas.width.toFloat()
+                val h = canvas.height.toFloat()
+                val bitmap = Bitmap.createScaledBitmap(view.bitmap,w.toInt(),h.toInt(),true)
+                container = ImageClipSideContainer(w,h,bitmap)
+            }
+            container?.draw(canvas,paint)
+            time++
+        }
+        fun handleTap() {
+
+        }
+    }
     data class ImageClipSideState(var w:Float,var maxW:Float,var x:Float = -w,var scale:Float = 0f,var dir:Float = 0f,var prevDir:Float = 1f,var prevScale:Float = 0f) {
         fun startUpdating(startcb:()->Unit) {
             dir = prevDir
