@@ -58,6 +58,7 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
     }
     data class ImageClipSideRenderer(var view:ImageClipSideView,var time:Int = 0) {
         var container:ImageClipSideContainer?=null
+        val animator = Animator(view)
         fun render(canvas:Canvas,paint:Paint) {
             if(time == 0) {
                 val w = canvas.width.toFloat()
@@ -67,9 +68,16 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             }
             container?.draw(canvas,paint)
             time++
+            animator.update({
+                container?.update({},{
+                    animator.stop()
+                })
+            })
         }
         fun handleTap() {
-
+            container?.startUpdating{
+                animator.start()
+            }
         }
     }
     data class Animator(var view:ImageClipSideView,var animated:Boolean = false) {
