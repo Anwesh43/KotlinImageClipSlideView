@@ -30,6 +30,32 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             canvas.restore()
         }
     }
+    data class ImageClipSideContainer(var w:Float,var h:Float,var bitmap: Bitmap,var n:Int=4) {
+        val state = ImageClipSideState(w/4,w)
+        var curr:ImageClipSide?=null
+        fun draw(canvas:Canvas,paint:Paint) {
+            canvas.save()
+            val path = Path()
+            path.addRect(RectF(0f,0f,state.x+state.w,h),Path.Direction.CW)
+            canvas.clipPath(path)
+            canvas.drawBitmap(bitmap,0f,0f,paint)
+            canvas.restore()
+            curr?.draw(canvas,paint,bitmap,state.scale)
+        }
+        fun update(updatecb:(Float)->Unit,stopcb:(Float)->Unit) {
+            state.update(updatecb,{
+                stopcb(it)
+                curr = null
+            })
+        }
+        fun startUpdating(startcb:()->Unit) {
+            state.startUpdating({
+                curr = ImageClipSide(-w,w/4)
+                startcb()
+
+            })
+        }
+    }
     data class ImageClipSideState(var w:Float,var maxW:Float,var x:Float = -w,var scale:Float = 0f,var dir:Float = 0f,var prevDir:Float = 1f,var prevScale:Float = 0f) {
         fun startUpdating(startcb:()->Unit) {
             dir = prevDir
@@ -43,7 +69,7 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
                 prevScale = scale+dir
                 dir = 0f
                 stopcb(scale)
-                if(x + w >= maxW) {
+                if(x + w >= maxW || x<=-w) {
                     prevDir *= -1
                 }
 
