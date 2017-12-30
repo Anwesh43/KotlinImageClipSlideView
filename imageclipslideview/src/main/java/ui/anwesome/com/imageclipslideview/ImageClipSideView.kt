@@ -72,6 +72,31 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
 
         }
     }
+    data class Animator(var view:ImageClipSideView,var animated:Boolean = false) {
+        fun update(cb:()->Unit) {
+            if(animated) {
+                cb()
+                try {
+                    Thread.sleep(50)
+                    view.invalidate()
+                }
+                catch(ex:Exception) {
+
+                }
+            }
+        }
+        fun start() {
+            if(!animated) {
+                animated = true
+                view.postInvalidate()
+            }
+        }
+        fun stop() {
+            if(animated) {
+                animated = false
+            }
+        }
+    }
     data class ImageClipSideState(var w:Float,var maxW:Float,var x:Float = -w,var scale:Float = 0f,var dir:Float = 0f,var prevDir:Float = 1f,var prevScale:Float = 0f) {
         fun startUpdating(startcb:()->Unit) {
             dir = prevDir
