@@ -26,8 +26,28 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             val path = Path()
             path.addRect(RectF(x,0f,x+w,bitmap.width.toFloat()),Path.Direction.CW)
             canvas.clipPath(path)
-            canvas.drawBitmap(bitmap,-w*scale,0f,paint)
+
             canvas.restore()
+        }
+    }
+    data class ImageClipSideState(var w:Float,var maxW:Float,var x:Float = -w,var scale:Float = 0f,var dir:Float = 0f,var prevDir:Float = 1f,var prevScale:Float = 0f) {
+        fun startUpdating(startcb:()->Unit) {
+            dir = prevDir
+            startcb()
+        }
+        fun update(updatecb:(Float)->Unit,stopcb:(Float)->Unit) {
+            scale += dir*0.1f
+            updatecb(scale)
+            x+= w*scale
+            if(Math.abs(scale - prevScale) > 1) {
+                prevScale = scale+dir
+                dir = 0f
+                stopcb(scale)
+                if(x + w >= maxW) {
+                    prevDir *= -1
+                }
+
+            }
         }
     }
 }
