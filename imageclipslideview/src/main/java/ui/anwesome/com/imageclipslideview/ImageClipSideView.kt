@@ -1,5 +1,6 @@
 package ui.anwesome.com.imageclipslideview
 
+import android.app.Activity
 import android.content.Context
 import android.view.*
 import android.graphics.*
@@ -10,6 +11,7 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
     val paint:Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     val renderer = ImageClipSideRenderer(this)
     override fun onDraw(canvas:Canvas) {
+        canvas.drawColor(Color.parseColor("#212121"))
         renderer.render(canvas,paint)
     }
     override fun onTouchEvent(event:MotionEvent):Boolean {
@@ -124,6 +126,13 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
                 }
 
             }
+        }
+    }
+    companion object {
+        fun create(activity:Activity,bitmap:Bitmap):ImageClipSideView {
+            val view = ImageClipSideView(activity,bitmap)
+            activity.addContentView(view,ViewGroup.LayoutParams(1080,1080))
+            return view
         }
     }
 }
