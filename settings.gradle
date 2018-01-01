@@ -1,1 +1,1 @@
-include ':app', ':imageclipslideview'
+include ':app', ':imageclipslideview', ':lineindicatorview'
