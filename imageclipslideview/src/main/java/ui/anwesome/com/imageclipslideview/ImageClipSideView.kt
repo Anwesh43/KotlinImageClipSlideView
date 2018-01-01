@@ -9,11 +9,16 @@ import android.graphics.*
  */
 class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
     val paint:Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    var onUpdateListener:OnUpdateListener?=null
     val renderer = ImageClipSideRenderer(this)
+    fun setOnUpdateListener(onUpdate: (Float) -> Unit) {
+        onUpdateListener = OnUpdateListener(onUpdate)
+    }
     override fun onDraw(canvas:Canvas) {
         canvas.drawColor(Color.parseColor("#212121"))
         renderer.render(canvas,paint)
     }
+    data class OnUpdateListener(var onUpdate:(Float)->Unit)
     override fun onTouchEvent(event:MotionEvent):Boolean {
         when(event.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -74,7 +79,9 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
             container?.draw(canvas,paint)
             time++
             animator.update({
-                container?.update({},{
+                container?.update({
+                    view.onUpdateListener?.onUpdate?.invoke(it)
+                },{
                     animator.stop()
                 })
             })
