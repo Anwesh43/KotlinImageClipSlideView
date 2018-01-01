@@ -30,7 +30,9 @@ class LineIndicatorView(ctx:Context):View(ctx) {
             paint.strokeWidth = h/2
             paint.strokeCap = Paint.Cap.ROUND
             paint.color = Color.parseColor("#00C853")
-            canvas.drawLine(w/20,h/2,(19*w/20)*scale,h/2,paint)
+            if(scale != 0f) {
+                canvas.drawLine(w / 20, h / 2, (19 * w / 20) * scale, h / 2, paint)
+            }
         }
         fun update(scale:Float) {
             this.scale = scale
@@ -47,7 +49,7 @@ class LineIndicatorView(ctx:Context):View(ctx) {
             var h = size.y
             activity.addContentView(view, ViewGroup.LayoutParams(w,h/15))
             view.x = 0f
-            view.y = 0.9f*h
+            view.y = 0.7f*h
             return view
         }
     }
