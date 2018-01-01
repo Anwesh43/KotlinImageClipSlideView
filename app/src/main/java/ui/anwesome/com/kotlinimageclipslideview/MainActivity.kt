@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val view = ImageClipSideView.create(this,BitmapFactory.decodeResource(resources,R.drawable.trphy))
         val lineIndicatorView = LineIndicatorView.create(this)
-        view.setOnUpdateListener {  
+        view.setOnUpdateListener {
             lineIndicatorView.update(it)
         }
     }
