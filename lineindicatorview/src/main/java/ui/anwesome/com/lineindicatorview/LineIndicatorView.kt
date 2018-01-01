@@ -1,10 +1,14 @@
 package ui.anwesome.com.lineindicatorview
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Point
+import android.hardware.display.DisplayManager
 import android.view.View
+import android.view.ViewGroup
 
 /**
  * Created by anweshmishra on 01/01/18.
@@ -30,6 +34,21 @@ class LineIndicatorView(ctx:Context):View(ctx) {
         }
         fun update(scale:Float) {
             this.scale = scale
+        }
+    }
+    companion object {
+        fun create(activity: Activity):LineIndicatorView {
+            val view = LineIndicatorView(activity)
+            val displayManager:DisplayManager = activity.getSystemService(Context.DISPLAY_SERVICE) as DisplayManager
+            val display = displayManager?.getDisplay(0)
+            val size = Point()
+            display.getRealSize(size)
+            var w = size.x
+            var h = size.y
+            activity.addContentView(view, ViewGroup.LayoutParams(w,h/15))
+            view.x = 0f
+            view.y = 0.9f*h
+            return view
         }
     }
 }
