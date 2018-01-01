@@ -124,7 +124,7 @@ class ImageClipSideView(ctx:Context,var bitmap:Bitmap):View(ctx) {
         }
         fun update(updatecb:(Float)->Unit,stopcb:(Float)->Unit) {
             scale += 0.1f
-            updatecb(scale)
+            updatecb((x+w)/maxW)
             x = prevX + w*scale*dir
             if(scale > 1f) {
                 scale = 1f
